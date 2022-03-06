@@ -22,6 +22,7 @@ litecli = "*"
 sqlalchemy = {extras = ["mypy"], version = "*"}
 black = "*"
 ipdb = "*"
+click = "*"
 
 [requires]
 python_version = "3.10"

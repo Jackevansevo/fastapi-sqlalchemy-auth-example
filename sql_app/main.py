@@ -105,7 +105,6 @@ def read_users(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
-    # token=Depends(get_current_user),
 ):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users

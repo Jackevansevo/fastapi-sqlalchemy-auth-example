@@ -5,11 +5,16 @@
 
     pipenv install --dev
 
+    chmod +x manage.py
+
+    ./manage.py initdb
+
 
 ## Running
 
-    uvicorn sql_app.main:app --reload
+    ./manage.py runserver
 
+Then visit http://localhost:8000/docs
 
 ## Inspect the DB
 
