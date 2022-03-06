@@ -6,17 +6,11 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from . import crud, models, schemas
-from .database import SessionLocal, engine
-
-models.Base.metadata.create_all(bind=engine)
+from . import crud, schemas
+from .database import SessionLocal
 
 
 app = FastAPI()
-
-
-def fake_hash_password(password: str):
-    return password + "notreallyhashed"
 
 
 SECRET_KEY = "35d6d2d0c2a05da331562b6b07e8736bfe72dc7509a42487bc223814cbdcd955"
@@ -25,14 +19,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(password):
-    return pwd_context.hash(password)
 
 
 @app.middleware("http")
@@ -55,7 +41,7 @@ def authenticate_user(db: Session, username: str, password: str):
     user = crud.get_user_by_username(db, username)
     if not user:
         return False
-    if not verify_password(password, user.hashed_password):
+    if not pwd_context.verify(password, user.hashed_password):
         return False
     return user
 
